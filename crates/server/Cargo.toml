@@ -1,0 +1,25 @@
+[package]
+name = "totenrunde-mp-server"
+description = "Server des Totenrunde-Multiplayers: Konten (SQLite), Konto-API, Lobbys und Relay als Axum-Router"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+argon2 = { version = "0.5", features = ["std"] }
+axum = { version = "0.8", features = ["ws"] }
+bytes = "1"
+futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
+getrandom = { version = "0.3", features = ["std"] }
+rusqlite = { version = "0.41", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+tokio = { version = "1", features = ["rt", "sync", "time"] }
+totenrunde-mp-protocol.workspace = true
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "time"] }
+tokio-tungstenite = "0.30"

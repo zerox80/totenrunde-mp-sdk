@@ -1,0 +1,32 @@
+name: Prüfen
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+      - name: Formatierung
+        run: cargo fmt --all --check
+      - name: Clippy (Desktop und Browser)
+        run: |
+          cargo clippy --locked --workspace --all-targets -- -D warnings
+          cargo clippy --locked -p totenrunde-mp-client --target wasm32-unknown-unknown -- -D warnings
+      - name: Tests
+        run: cargo test --locked --workspace

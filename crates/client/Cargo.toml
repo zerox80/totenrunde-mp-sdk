@@ -1,0 +1,27 @@
+[package]
+name = "totenrunde-mp-client"
+description = "Client des Totenrunde-Multiplayers: WebSocket für Desktop und Browser, Anmeldung, Pings"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+totenrunde-mp-protocol.workspace = true
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+# TLS mit ring statt aws-lc: baut ohne CMake/NASM auch unter Windows
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+tungstenite = { version = "0.30", default-features = false, features = ["handshake"] }
+webpki-roots = "1"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+js-sys = "0.3"
+wasm-bindgen = "0.2"
+web-sys = { version = "0.3", features = ["BinaryType", "CloseEvent", "Event", "MessageEvent", "WebSocket"] }
+
+[dev-dependencies]
+axum = "0.8"
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "time"] }
+totenrunde-mp-server.workspace = true
